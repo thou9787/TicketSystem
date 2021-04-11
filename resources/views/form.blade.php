@@ -30,9 +30,9 @@
                     <button type="submit">登入</button>
                 </form> -->
                 <form action="{{ url("/form")}}" method="POST">
-                {{ csrf_field() }}
+                @csrf
                     <td>Date:
-                        <input type="date" name="date">
+                        <input type="date" name="date" value="{{Carbon\Carbon::now()->toDateString()}}">
                     </td>
                     <td>From:
                         <select name= "from">
