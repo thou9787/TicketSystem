@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTicketsTable extends Migration
+class CreateTimeTablesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,17 @@ class CreateTicketsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tickets', function (Blueprint $table) {
+        Schema::create('time_tables', function (Blueprint $table) {
             $table->id();
+            $table->string('trainDate');
             $table->string('trainNo');
+            $table->string('originStationId');
             $table->string('originStationName');
+            $table->string('destinationStationId');
             $table->string('destinationStationName');
-            $table->time('departureTime'); //Carbon()
-            $table->time('arrivalTime');
-            $table->string('user_id');
-            //$table->string('ticketNo'); //購票之後自動產生，可以考慮要不要用個hash
+            $table->string('departureTime');
+            $table->string('arrivalTime');
+            $table->string('duration');
             $table->timestamps();
         });
     }
@@ -33,6 +35,6 @@ class CreateTicketsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tickets');
+        Schema::dropIfExists('time_tables');
     }
 }

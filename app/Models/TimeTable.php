@@ -5,18 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Ticket extends Model
+class TimeTable extends Model
 {
     use HasFactory;
-
-    
     protected $fillable = [
-        'id',
+        'trainDate',
         'trainNo',
+        'originStationId',
         'originStationName',
+        'destinationStationId',
         'destinationStationName',
         'departureTime',
         'arrivalTime',
-        'ticketNo'
+        'duration',
     ];
+
 }

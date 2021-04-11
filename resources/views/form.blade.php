@@ -6,26 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>BookPage</title>
-    <style>
-        table,
-        td {
-            border: 1px solid #333;
-        }
 
-        thead,
-        tfoot {
-            background-color: #333;
-            color: #fff;
-        }
-    </style>
+    <!-- Style -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">  
+    <title>BookPage</title>
+    
 </head>
 
 <body>
-    <table>
+    <!-- @include('errors') -->
+    <table class="table">
         <thead>
             <tr>
-                <th colspan="4">The table header</th>
+                <th>Book Ticket HomePage</th>
             </tr>
         </thead>
         <tbody>
@@ -37,27 +30,30 @@
                     <button type="submit">登入</button>
                 </form> -->
                 <form action="{{ url("/form")}}" method="POST">
-                @csrf
+                {{ csrf_field() }}
+                    <td>Date:
+                        <input type="date" name="date">
+                    </td>
                     <td>From:
-                        <select name= "From">
-                            <option value="0000" name="options">Where you wanna go?</option>
-                            <option value="1000" name="taipei">台北</option>
-                            <option value="0990" name="nangung">南港</option>
-                            <option value="1010" name="banchao">板橋</option>
-                            <option value="1020" name="taoyun">桃園</option>
-                            <option value="1030" name="hsinchu">新竹</option>
-                            <option value="1035" name="meowli">苗栗</option>
-                            <option value="1040" name="taichung">台中</option>
-                            <option value="1043" name="chunghua">彰化</option>
-                            <option value="1047" name="yunlin">雲林</option>
-                            <option value="1050" name="chiayi">嘉義</option>
-                            <option value="1060" name="tainan">台南</option>
-                            <option value="1070" name="zhuyin">左營</option>
+                        <select name= "from">
+                            <option>Where you wanna go?</option>
+                            <option value="1000">台北</option>
+                            <option value="0990">南港</option>
+                            <option value="1010">板橋</option>
+                            <option value="1020">桃園</option>
+                            <option value="1030">新竹</option>
+                            <option value="1035">苗栗</option>
+                            <option value="1040">台中</option>
+                            <option value="1043">彰化</option>
+                            <option value="1047">雲林</option>
+                            <option value="1050">嘉義</option>
+                            <option value="1060">台南</option>
+                            <option value="1070">左營</option>
                         </select>
                     </td>
                     <td>To:
-                        <select name="To">
-                            <option value="0000">Where you wanna go?</option>
+                        <select name="to">
+                            <option>Where you wanna go?</option>
                             <option value="0990">南港</option>
                             <option value="1000">台北</option>
                             <option value="1010">板橋</option>
@@ -73,20 +69,31 @@
                         </select>
                     </td>
                     <td>Time:
-                        <select name="Time">
-                            <option value="0000">00:00</option>
-                            <option value="0100">01:00</option>
-                            <option value="0200">02:00</option>
-                            <option value="0300">03:00</option>
-                            <option value="0400">04:00</option>
-                            <option value="0500">05:00</option>
-                            <option value="0600">06:00</option>
-                            <option value="0700">07:00</option>
-                            <option value="0800">08:00</option>
-                            <option value="0900">09:00</option>
-                            <option value="1000">10:00</option>
-                            <option value="1100">11:00</option>
-                            <option value="1200">12:00</option>
+                        <select name="time">
+                            <option value="00:00:00">00:00</option>
+                            <option value="01:00:00">01:00</option>
+                            <option value="02:00:00">02:00</option>
+                            <option value="03:00:00">03:00</option>
+                            <option value="04:00:00">04:00</option>
+                            <option value="05:00:00">05:00</option>
+                            <option value="06:00:00">06:00</option>
+                            <option value="07:00:00">07:00</option>
+                            <option value="08:00:00">08:00</option>
+                            <option value="09:00:00">09:00</option>
+                            <option value="10:00:00">10:00</option>
+                            <option value="11:00:00">11:00</option>
+                            <option value="12:00:00">12:00</option>
+                            <option value="13:00:00">13:00</option>
+                            <option value="14:00:00">14:00</option>
+                            <option value="15:00:00">15:00</option>
+                            <option value="16:00:00">16:00</option>
+                            <option value="17:00:00">17:00</option>
+                            <option value="18:00:00">18:00</option>
+                            <option value="19:00:00">19:00</option>
+                            <option value="20:00:00">20:00</option>
+                            <option value="21:00:00">21:00</option>
+                            <option value="22:00:00">22:00</option>
+                            <option value="23:00:00">23:00</option>
                         </select>
                     </td>
                     <td><input type="submit" value="Go"></td>

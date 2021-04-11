@@ -19,7 +19,7 @@ class PTXApiAuth{
                     "method" => "GET",
                     "header" =>
                     'Authorization:hmac username="' . $this->appId . '", algorithm="hmac-sha1", headers="x-date", signature="' . "$this->signature\"\n" .
-                    "x-date:$this->time_string\n",
+                    "x-date: $this->time_string\n",
                     "Accept-Encoding: gzip, deflate\n",
             ]
         ];
