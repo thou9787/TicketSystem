@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Ticket extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'id',
         'trainNo',
@@ -16,6 +16,7 @@ class Ticket extends Model
         'destinationStationName',
         'departureTime',
         'arrivalTime',
+        'fare',
         'user_id'
     ];
 

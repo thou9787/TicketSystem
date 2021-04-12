@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
-
+use App\ApiRequest\PTXRequest;
 
 class TicketController extends Controller
 {
@@ -37,12 +37,14 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
+        $fare = new PTXRequest($request);
         $ticket = Ticket::create([
             'trainNo' => $request->trainNo,
             'originStationName' => $request->originStationName,
             'destinationStationName' => $request->destinationStationName,
             'departureTime' => $request->departureTime,
             'arrivalTime' => $request->arrivalTime,
+            'fare' => $fare->getFare(),
             'user_id' => $request->user()->id,
         ]);
         return view('success');

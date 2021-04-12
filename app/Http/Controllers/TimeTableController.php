@@ -60,6 +60,8 @@ class TimeTableController extends Controller
                     'departureTime' => $table['departureTime'],
                     'arrivalTime' => $table['arrivalTime'],
                     'duration' => $duration, 
+                    'type' => $request->type,
+                    'amount' => $request->amount,
                 ]);
             }
             
@@ -76,7 +78,6 @@ class TimeTableController extends Controller
     public function show(TimeTable $timeTable)
     {
         //
-        
     }
 
     /**

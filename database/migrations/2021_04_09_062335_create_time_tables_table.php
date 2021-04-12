@@ -14,7 +14,7 @@ class CreateTimeTablesTable extends Migration
     public function up()
     {
         Schema::create('time_tables', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('trainDate');
             $table->string('trainNo');
             $table->string('originStationId');
@@ -24,6 +24,8 @@ class CreateTimeTablesTable extends Migration
             $table->string('departureTime');
             $table->string('arrivalTime');
             $table->string('duration');
+            $table->string('type');
+            $table->integer('amount');
             $table->timestamps();
         });
     }

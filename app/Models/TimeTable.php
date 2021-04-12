@@ -18,6 +18,8 @@ class TimeTable extends Model
         'departureTime',
         'arrivalTime',
         'duration',
+        'type',
+        'amount'
     ];
 
 }

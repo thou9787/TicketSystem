@@ -20,8 +20,8 @@ class CreateTicketsTable extends Migration
             $table->string('destinationStationName');
             $table->time('departureTime'); //Carbon()
             $table->time('arrivalTime');
+            $table->string('fare');
             $table->string('user_id');
-            //$table->string('ticketNo'); //購票之後自動產生，可以考慮要不要用個hash
             $table->timestamps();
         });
     }

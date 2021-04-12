@@ -2,9 +2,7 @@
 namespace App\ApiRequest;
 
 use App\ApiRequest\PTXApiAuth;
-use Illuminate\Http\Request;
 
-//TODO:Done 封裝這個PTXRequest，最後只會提供一個getData()
 class PTXRequest 
 {
     private $ApiAuth;
@@ -12,8 +10,7 @@ class PTXRequest
     private $dailyTimeTableUrl;
     private $availableSeatsUrl;
     private $requestFormat;
-    private $requestTimeTableUrl;
-    private $requestAvailableSeatsUrl;
+    private $fareUrl;
     
     /**
      * Instance the PTXApiAuth object
@@ -28,9 +25,8 @@ class PTXRequest
         $this->base_url = 'https://ptx.transportdata.tw/MOTC/v2/Rail/THSR/';
         $this->dailyTimeTableUrl = 'DailyTimetable/';
         $this->availableSeatsUrl = 'AvailableSeatStatus/Train/';
+        $this->fareUrl = 'ODFare';
         $this->requestFormat = '$format=JSON';
-        //$this->requestTimeTableUrl = $this->getTimeTableUrl($request);
-        //$this->requestAvailableSeatsUrl = $this->getAvailableSeatsUrl($request);
     }
 
     /**
@@ -50,6 +46,7 @@ class PTXRequest
      * Combine seat url strings in request
      * 
      * @param \Illuminate\Http\Request  $request
+     * @param array $filter
      * @return string
      */
     private function getAvailableSeatsUrl($request, $filter=NULL)
@@ -67,8 +64,23 @@ class PTXRequest
     }
 
     /**
+     * Get the url of the ticket fare page
+     * 
+     * @param \Illuminate\Http\Request  $request
+     * @return string
+     */
+    private function getFareUrl($request) 
+    {
+        $filterQuery = 'OriginStationID%20eq%20' . "'{$request->originStationId}'" . '%20and%20DestinationStationID%20eq%20' . "'{$request->destinationStationId}'" . '&' . $this->requestFormat;
+        $fareUrl = $this->base_url . $this->fareUrl . '?$filter=' . $filterQuery;
+        
+        return $fareUrl;
+    }
+
+    /**
      * To get the data from PTX platform
      * 
+     * @param string $requestUrl
      * @return json
      */
     private function sendRequest($requestUrl)
@@ -121,5 +133,20 @@ class PTXRequest
             }
         }
         return $availableTimeTable;
+    }
+
+    /**
+     * Get the fare of the tickets
+     * 
+     * @return integer
+     */
+    public function getFare() 
+    {
+        $fare = $this->sendRequest($this->getFareUrl($this->request));
+        if ($this->request->type == "business") {
+            return $fare[0]->Fares[0]->Price*$this->request->amount;
+        } else {
+            return $fare[0]->Fares[1]->Price*$this->request->amount;
+        }
     }
 }
