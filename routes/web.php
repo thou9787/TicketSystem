@@ -22,9 +22,12 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/form', "FormController@index");
+Route::get('/form', "FormController@index")->middleware('auth');
 Route::post('/form', "TimeTableController@store");
 Route::apiResource('/ticket', TicketController::class);
+Route::get('/index', function () {
+    return view('index');
+});
 Route::get('/ticketss', function () {
     return view('ticket');
 });

@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Ticket extends Model
 {
     use HasFactory;
-
     
     protected $fillable = [
         'id',
@@ -17,6 +16,10 @@ class Ticket extends Model
         'destinationStationName',
         'departureTime',
         'arrivalTime',
-        'ticketNo'
+        'user_id'
     ];
+
+    public function users() {
+        return $this->hasmany('App\Models\User');
+    }
 }

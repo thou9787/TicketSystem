@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 
@@ -36,7 +37,14 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        $ticket = Ticket::create($request->all());
+        $ticket = Ticket::create([
+            'trainNo' => $request->trainNo,
+            'originStationName' => $request->originStationName,
+            'destinationStationName' => $request->destinationStationName,
+            'departureTime' => $request->departureTime,
+            'arrivalTime' => $request->arrivalTime,
+            'user_id' => $request->user()->id,
+        ]);
         return view('success');
     }
 

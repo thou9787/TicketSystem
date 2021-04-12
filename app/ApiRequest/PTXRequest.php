@@ -78,28 +78,6 @@ class PTXRequest
         );
         return json_decode($timeTable);
     }
-    
-    /**
-     * Get the time table which has seats
-     * 
-     * @return array
-     */
-    public function getAvailableTimeTable()
-    {
-        $timeTableArr = $this->getTimeTable();
-        foreach ($timeTableArr as $table) {
-            $trainNoArr[] = "'" . $table['trainNo'] . "'";
-        }
-        $requestAvailableSeatsUrl = $this->getAvailableSeatsUrl($this->request, $trainNoArr);
-        $availableSeats = $this->sendRequest($requestAvailableSeatsUrl);
-
-        foreach ($availableSeats->AvailableSeats as $seat) {
-            if ($seat->StandardSeatStatus == "O") {
-                $availableTimeTable[$seat->TrainNo] = $timeTableArr[$seat->TrainNo];
-            }
-        }
-        return $availableTimeTable;
-    }
 
     /**
      * Transform request data to array 
@@ -121,5 +99,27 @@ class PTXRequest
             ];
         }
         return $timeTableArr;
+    }
+
+    /**
+     * Get the time table which has seats
+     * 
+     * @return array
+     */
+    public function getAvailableTimeTable()
+    {
+        $timeTableArr = $this->getTimeTable();
+        foreach ($timeTableArr as $table) {
+            $trainNoArr[] = "'" . $table['trainNo'] . "'";
+        }
+        $requestAvailableSeatsUrl = $this->getAvailableSeatsUrl($this->request, $trainNoArr);
+        $availableSeats = $this->sendRequest($requestAvailableSeatsUrl);
+
+        foreach ($availableSeats->AvailableSeats as $seat) {
+            if ($seat->StandardSeatStatus == "O") {
+                $availableTimeTable[$seat->TrainNo] = $timeTableArr[$seat->TrainNo];
+            }
+        }
+        return $availableTimeTable;
     }
 }
