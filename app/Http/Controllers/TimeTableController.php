@@ -26,17 +26,6 @@ class TimeTableController extends Controller
     public function create()
     {
 
-        // //TODO:跟departureTime做比較
-        // $this->validate($request, [
-        //     'date' => 'required',
-        //     'from' => 'required|different:to',
-        //     'to' => 'required',
-        // ]);
-        // $tableCatcher = new PTXRequest($request);
-        // $timeTable = $tableCatcher->getTimeTable();
-        // foreach($timeTable as $table) {
-        //     if($table['departureTime'] )
-        // }
     }
 
     /**
@@ -54,13 +43,13 @@ class TimeTableController extends Controller
             'to' => 'required',
         ]);
         $tableCatcher = new PTXRequest($request);
-        $timeTable = $tableCatcher->getTimeTable();
+        $timeTable = $tableCatcher->getAvailableTimeTable();
         /**
-         * FIXME:把timetable資料存進cache裡，但是不知道有沒有必要
+         * FIXME:把timetable資料存進cache裡，paginate要做一下
          */
         foreach ($timeTable as $table) {
             $duration = date('H:i', (strtotime($table['arrivalTime']) - strtotime($table['departureTime'])));
-            if (Carbon::create($request->time)->lte($table['departureTime'])) {
+            if (Carbon::create($request->time)->lte(Carbon::create($table['departureTime']))) {
                 $timeTable = TimeTable::create([
                     'trainDate' => $table['trainDate'],
                     'trainNo' => $table['trainNo'],

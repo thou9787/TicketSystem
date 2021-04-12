@@ -4,14 +4,16 @@ namespace App\ApiRequest;
 use App\ApiRequest\PTXApiAuth;
 use Illuminate\Http\Request;
 
-//TODO:封裝這個PTXRequest，最後只會提供一個getData()
+//TODO:Done 封裝這個PTXRequest，最後只會提供一個getData()
 class PTXRequest 
 {
     private $ApiAuth;
     private $base_url;
-    private $searchTable;
+    private $dailyTimeTableUrl;
+    private $availableSeatsUrl;
     private $requestFormat;
-    private $requestUrl;
+    private $requestTimeTableUrl;
+    private $requestAvailableSeatsUrl;
     
     /**
      * Instance the PTXApiAuth object
@@ -22,23 +24,46 @@ class PTXRequest
     public function __construct($request)
     {
         $this->ApiAuth = new PTXApiAuth();
+        $this->request = $request;
         $this->base_url = 'https://ptx.transportdata.tw/MOTC/v2/Rail/THSR/';
-        $this->searchTable = 'DailyTimetable/';
-        $this->requestFormat = '?$format=JSON';
-        $this->requestUrl = $this->getUrl($request);
+        $this->dailyTimeTableUrl = 'DailyTimetable/';
+        $this->availableSeatsUrl = 'AvailableSeatStatus/Train/';
+        $this->requestFormat = '$format=JSON';
+        //$this->requestTimeTableUrl = $this->getTimeTableUrl($request);
+        //$this->requestAvailableSeatsUrl = $this->getAvailableSeatsUrl($request);
     }
 
     /**
-     * Combine strings in request
+     * Combine timetable url strings in request
      * 
      * @param \Illuminate\Http\Request  $request
      * @return string
      */
-    private function getUrl($request)
+    private function getTimeTableUrl($request)
     {
-        $finalUrl = $this->base_url . $this->searchTable . 'OD/' . $request->from . '/to/' . $request->to . '/' . $request->date . $this->requestFormat;
+        $timeTableUrl = $this->base_url . $this->dailyTimeTableUrl . 'OD/' . $request->from . '/to/' . $request->to . '/' . $request->date . '?' . $this->requestFormat;
                  
-        return $finalUrl;
+        return $timeTableUrl;
+    }
+
+    /**
+     * Combine seat url strings in request
+     * 
+     * @param \Illuminate\Http\Request  $request
+     * @return string
+     */
+    private function getAvailableSeatsUrl($request, $filter=NULL)
+    {
+        $availableSeatsUrl = $this->base_url . $this->availableSeatsUrl . 'OD/' . $request->from . '/to/' . $request->to . '/TrainDate/' . $request->date . '?';
+        if ($filter != NULL) {
+            $filterQuery = '$filter=trainNo%20eq%20';
+            $filterQuery .= implode('%20or%20trainNo%20eq%20', $filter);
+            $availableSeatsUrl .= $filterQuery . '%20&' . $this->requestFormat;
+        } else {
+            $availableSeatsUrl .= $this->requestFormat;
+        }
+        
+        return $availableSeatsUrl;
     }
 
     /**
@@ -46,24 +71,45 @@ class PTXRequest
      * 
      * @return json
      */
-    private function sendRequest()
+    private function sendRequest($requestUrl)
     {
         $timeTable = file_get_contents(
-            $this->requestUrl, false, stream_context_create($this->ApiAuth->getAuthHeaders())
+            $requestUrl, false, stream_context_create($this->ApiAuth->getAuthHeaders())
         );
         return json_decode($timeTable);
     }
     
     /**
+     * Get the time table which has seats
+     * 
+     * @return array
+     */
+    public function getAvailableTimeTable()
+    {
+        $timeTableArr = $this->getTimeTable();
+        foreach ($timeTableArr as $table) {
+            $trainNoArr[] = "'" . $table['trainNo'] . "'";
+        }
+        $requestAvailableSeatsUrl = $this->getAvailableSeatsUrl($this->request, $trainNoArr);
+        $availableSeats = $this->sendRequest($requestAvailableSeatsUrl);
+
+        foreach ($availableSeats->AvailableSeats as $seat) {
+            if ($seat->StandardSeatStatus == "O") {
+                $availableTimeTable[$seat->TrainNo] = $timeTableArr[$seat->TrainNo];
+            }
+        }
+        return $availableTimeTable;
+    }
+
+    /**
      * Transform request data to array 
      * 
      * @return array
      */
-    public function getTimeTable()
+    private function getTimeTable()
     {
-        //TODO:將出發時間跟request時間做比較
-        foreach ($this->sendRequest() as $table) {
-            $timeTableArr[] = [
+        foreach ($this->sendRequest($this->getTimeTableUrl($this->request)) as $table) {
+            $timeTableArr[$table->DailyTrainInfo->TrainNo] = [
                 'trainDate' => $table->TrainDate,
                 'trainNo' => $table->DailyTrainInfo->TrainNo,
                 'originStationId' => $table->OriginStopTime->StationID,

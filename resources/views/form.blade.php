@@ -37,8 +37,8 @@
                     <td>From:
                         <select name= "from">
                             <option>Where you wanna go?</option>
-                            <option value="1000">台北</option>
                             <option value="0990">南港</option>
+                            <option value="1000">台北</option>
                             <option value="1010">板橋</option>
                             <option value="1020">桃園</option>
                             <option value="1030">新竹</option>
