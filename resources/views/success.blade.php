@@ -43,6 +43,7 @@
       </div>
         <h1>Success</h1> 
         <p>You are finish the booking!!!</p>
+        <a href="/form">點我回到訂票首頁...</a>
       </div>
     </body>
 </html>

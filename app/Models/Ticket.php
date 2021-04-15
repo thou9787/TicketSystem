@@ -16,8 +16,12 @@ class Ticket extends Model
         'destinationStationName',
         'departureTime',
         'arrivalTime',
+        'amount',
         'fare',
-        'user_id'
+        'user_id',
+        'trainDate',
+        'ticketNo',
+        'paid'
     ];
 
     public function users() {

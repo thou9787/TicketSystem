@@ -21,7 +21,11 @@ class CreateTicketsTable extends Migration
             $table->time('departureTime'); //Carbon()
             $table->time('arrivalTime');
             $table->string('fare');
+            $table->integer('amount');
             $table->string('user_id');
+            $table->string('trainDate');
+            $table->string('ticketNo');
+            $table->integer('paid')->default('0');
             $table->timestamps();
         });
     }

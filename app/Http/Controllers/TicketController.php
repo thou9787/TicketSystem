@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\AddColumnData\AddColumnData;
 use App\Models\User;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use App\ApiRequest\PTXRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
+use App\Http\Resources\TicketResource;
 
 class TicketController extends Controller
 {
@@ -14,9 +18,9 @@ class TicketController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return PageController::pay();
     }
 
     /**
@@ -24,9 +28,8 @@ class TicketController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
     }
 
     /**
@@ -38,16 +41,23 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         $fare = new PTXRequest($request);
-        $ticket = Ticket::create([
-            'trainNo' => $request->trainNo,
-            'originStationName' => $request->originStationName,
-            'destinationStationName' => $request->destinationStationName,
-            'departureTime' => $request->departureTime,
-            'arrivalTime' => $request->arrivalTime,
-            'fare' => $fare->getFare(),
-            'user_id' => $request->user()->id,
-        ]);
-        return view('success');
+        while ($request->amount > 0) {
+            Ticket::create([
+                'trainNo' => $request->trainNo,
+                'originStationName' => $request->originStationName,
+                'destinationStationName' => $request->destinationStationName,
+                'departureTime' => $request->departureTime,
+                'arrivalTime' => $request->arrivalTime,
+                'fare' => $fare->getFare(),
+                'amount' => 1,
+                'user_id' => Auth::user()->id,
+                'trainDate' => $request->date,
+                'ticketNo' => AddColumnData::generateHash(),
+            ]);
+            $request->amount--;
+        }
+        
+        return $this->index($request);
     }
 
     /**
@@ -59,6 +69,7 @@ class TicketController extends Controller
     public function show(Ticket $ticket)
     {
         //
+        return new TicketResource($ticket);
     }
 
     /**
@@ -81,7 +92,8 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
-        //
+        $ticket->update($request->all());
+        return view('success');
     }
 
     /**
@@ -92,6 +104,7 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket)
     {
-        //
+        $ticket->delete();
+        return redirect('/history');
     }
 }

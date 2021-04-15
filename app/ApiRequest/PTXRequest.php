@@ -55,7 +55,7 @@ class PTXRequest
         if ($filter != NULL) {
             $filterQuery = '$filter=trainNo%20eq%20';
             $filterQuery .= implode('%20or%20trainNo%20eq%20', $filter);
-            $availableSeatsUrl .= $filterQuery . '%20&' . $this->requestFormat;
+            $availableSeatsUrl .= $filterQuery . '%20' . '&' . $this->requestFormat;
         } else {
             $availableSeatsUrl .= $this->requestFormat;
         }
@@ -91,6 +91,11 @@ class PTXRequest
         return json_decode($timeTable);
     }
 
+    private function is_available($seats)
+    {
+        return ($seats->Count == 0) ? false : true;
+    }
+
     /**
      * Transform request data to array 
      * 
@@ -121,17 +126,27 @@ class PTXRequest
     public function getAvailableTimeTable()
     {
         $timeTableArr = $this->getTimeTable();
+
+        
+          
         foreach ($timeTableArr as $table) {
             $trainNoArr[] = "'" . $table['trainNo'] . "'";
         }
         $requestAvailableSeatsUrl = $this->getAvailableSeatsUrl($this->request, $trainNoArr);
         $availableSeats = $this->sendRequest($requestAvailableSeatsUrl);
 
-        foreach ($availableSeats->AvailableSeats as $seat) {
-            if ($seat->StandardSeatStatus == "O") {
-                $availableTimeTable[$seat->TrainNo] = $timeTableArr[$seat->TrainNo];
+        if($this->is_available($availableSeats)) {
+            foreach ($availableSeats->AvailableSeats as $seat) {
+                if ($seat->StandardSeatStatus == "O" && $this->request->type == "economic") {
+                    $availableTimeTable[$seat->TrainNo] = $timeTableArr[$seat->TrainNo];
+                } elseif ($seat->BusinessSeatStatus == "O" && $this->request->type == "business") {
+                    $availableTimeTable[$seat->TrainNo] = $timeTableArr[$seat->TrainNo];
+                } 
             }
+        } else {
+            $availableTimeTable = false;
         }
+        
         return $availableTimeTable;
     }
 
@@ -144,9 +159,9 @@ class PTXRequest
     {
         $fare = $this->sendRequest($this->getFareUrl($this->request));
         if ($this->request->type == "business") {
-            return $fare[0]->Fares[0]->Price*$this->request->amount;
+            return $fare[0]->Fares[0]->Price;
         } else {
-            return $fare[0]->Fares[1]->Price*$this->request->amount;
+            return $fare[0]->Fares[1]->Price;
         }
     }
 }

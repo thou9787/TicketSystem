@@ -41,6 +41,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Relate with tickets table
+     * 
+     * @return ?
+     */
     public function tickets() {
         return $this->belongsTo('App\Models\Ticket', 'user_id', 'id');
     }
