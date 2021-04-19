@@ -2,7 +2,7 @@
 @section('css_history')
 <style>
     .container {
-        padding:0;
+        padding: 0;
         margin-top: 0;
     }
 </style>
@@ -20,6 +20,7 @@
                         <th scope="col">終點站</th>
                         <th scope="col">出發時間</th>
                         <th scope="col">到達時間</th>
+                        <th scope="col">付款狀況</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -34,7 +35,16 @@
                             <td>{{ $history->destinationStationName  }}</td>
                             <td>{{ $history->departureTime }}</td>
                             <td>{{ $history->arrivalTime }}</td>
-                            <td><button type="submit" class="btn btn-primary">取消訂票</button></td>
+                            @if ($history->paid == 0)
+                            <td value="{{ $history->paid }}">未付款</td>
+                            <td>
+                                <a href="{{ url('\pay') }}" class="btn btn-success">來去付款</a>
+                                <button type="submit" class="btn btn-primary">取消訂票</button>
+                            </td>
+                            @else
+                            <td value="{{ $history->paid }}">已付款</td>
+                            <td></td>
+                            @endif
                         </form>
                     </tr>
                     @endforeach
