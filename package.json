@@ -11,8 +11,8 @@
     },
     "devDependencies": {
         "axios": "^0.21",
-        "bootstrap": "^4.0.0",
-        "jquery": "^3.2",
+        "bootstrap": "^4.6.0",
+        "jquery": "^3.6.0",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
         "popper.js": "^1.12",
@@ -23,5 +23,8 @@
         "vue": "^2.5.17",
         "vue-loader": "^15.9.6",
         "vue-template-compiler": "^2.6.10"
+    },
+    "dependencies": {
+        "smartwizard": "^5.1.1"
     }
 }

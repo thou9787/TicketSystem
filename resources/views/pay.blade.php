@@ -49,7 +49,7 @@
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 text-right">
                         <p>
-                            <em>Date: {{ Carbon\Carbon::now('Asia/Taipei')}}</em>
+                            <em>Date: {{ Carbon\Carbon::now('Asia/Taipei') }}</em>
                         </p>
                         <p>
                             <em>Receipt #: 34522677W</em> <!-- 車票編號hash -->
@@ -78,7 +78,8 @@
                         <tbody>
                             @foreach ($tickets as $ticket)
                             <tr>
-                                <td class="col-md-2"><em>{{ $ticket->trainDate }}</em></h4></td>
+                                <td class="col-md-2"><em>{{ $ticket->trainDate }}</em></h4>
+                                </td>
                                 <td class="col-md-2">{{ $ticket->trainNo }}</td>
                                 <td class="col-md-2">{{ $ticket->originStationName }}</td>
                                 <td class="col-md-2">{{ $ticket->destinationStationName }}</td>
@@ -87,7 +88,7 @@
                                 <td class="col-md-2">{{ $ticket->amount }}</td>
                                 <td class="col-md-1">{{ $ticket->fare }}</td>
                             </tr>
-                            @endforeach 
+                            @endforeach
                             <tr>
                                 <td>   </td>
                                 <td>   </td>
@@ -130,12 +131,13 @@
                                                         </div>
                                                     </div>
                                                     <div class="panel-body">
-                                                        <form role="form">
+                                                        <form role="form" action="{{ url('/success')}}">
+                                                        @csrf
                                                             <div class="form-group">
                                                                 <label for="cardNumber">
                                                                     CARD NUMBER</label>
                                                                 <div class="input-group">
-                                                                    <input type="text" class="form-control" id="cardNumber" placeholder="Valid Card Number" required autofocus />
+                                                                    <input type="text" class="form-control" id="cardNumber" name="cardNumber" placeholder="Valid Card Number" min="16" max="16" required autofocus />
                                                                     <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
                                                                 </div>
                                                             </div>
@@ -160,24 +162,26 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <ul class="nav nav-pills nav-stacked">
+                                                                <li class="active">
+                                                                    <a href="#">
+                                                                        <span class="badge pull-right">
+                                                                            <span class="glyphicon glyphicon-usd">
+
+                                                                            </span>
+                                                                            {{ $total_price }}
+                                                                        </span>
+                                                                        Final Payment
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                            <br/>
+                                                            <div class="form-group">
+                                                                <button type="submit" class="btn btn-success btn-lg btn-block">Pay</button>
+                                                            </div>
                                                         </form>
                                                     </div>
                                                 </div>
-                                                <ul class="nav nav-pills nav-stacked">
-                                                    <li class="active">
-                                                        <a href="#">
-                                                            <span class="badge pull-right">
-                                                                <span class="glyphicon glyphicon-usd">
-
-                                                                </span>
-                                                                4200
-                                                            </span>
-                                                            Final Payment
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                                <br />
-                                                <a href="{{ '/success' }}" class="btn btn-success btn-lg btn-block" role="button">Pay</a>
                                             </div>
                                         </div>
                                     </div>
