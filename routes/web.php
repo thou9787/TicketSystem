@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FormController;
-
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Admin;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,20 +14,21 @@ use App\Http\Controllers\FormController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
     return view('welcome');
 });
-
+//TODO: 4. 整合頁面
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/form', "FormController@index")->middleware('auth');
-Route::post('/form', "TimeTableController@store");
-Route::apiResource('/ticket', TicketController::class);
-Route::get('/index', function () {
-    return view('index');
-});
-Route::get('/ticketss', function () {
-    return view('ticket');
-});
+Route::get('/form', "PageController@form")->middleware('auth');
+Route::get('/pay', "PageController@pay");
+Route::get('/success', "PageController@success");
+Route::get('/history', "PageController@history");
+
+Route::resource('/timetable', TimeTableController::class)->middleware('auth');
+Route::resource('/ticket', TicketController::class)->middleware('auth');
+Route::resource('/user', UserController::class);
+Route::get('/admin/tickets', "AdminController@showAllTickets")->middleware('auth');
+Route::get('/admin/users', "AdminController@showAllUsers")->middleware('auth');
+

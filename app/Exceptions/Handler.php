@@ -34,13 +34,26 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+        $this->reportable(
+            function (Throwable $e) {
+                //
+            }
+        );
     }
-    public function render($request, Throwable $exception){
-        dd($exception);
-				//執行父類別的程式
+    
+    /**
+     * Error messages display page rendering
+     * 
+     * @param Illuminate\Http\Request $request
+     * 
+     * @param Throwable $exception
+     * 
+     * @return Illuminate\Contracts\Support\Renderable
+     */
+    public function render($request, Throwable $exception)
+    {
+        //dd($exception);
+        //執行父類別的程式
         return parent::render($request, $exception);
     }
 }

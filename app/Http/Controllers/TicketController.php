@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\AddColumnData\AddColumnData;
-use App\Models\User;
+
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use App\ApiRequest\PTXRequest;
+use App\Http\Requests\UpdateTicketRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Schema;
 use App\Http\Resources\TicketResource;
 
 class TicketController extends Controller
@@ -20,7 +19,7 @@ class TicketController extends Controller
      */
     public function index(Request $request)
     {
-        return PageController::pay();
+        
     }
 
     /**
@@ -30,6 +29,9 @@ class TicketController extends Controller
      */
     public function create(Request $request)
     {
+        $ticket = Ticket::create($request->all());
+        $ticket = $ticket->refresh();
+        return redirect('/admin/tickets');
     }
 
     /**
@@ -52,12 +54,11 @@ class TicketController extends Controller
                 'amount' => 1,
                 'user_id' => Auth::user()->id,
                 'trainDate' => $request->date,
-                'ticketNo' => AddColumnData::generateHash(),
             ]);
             $request->amount--;
         }
         
-        return $this->index($request);
+        return redirect('/pay');
     }
 
     /**
@@ -82,7 +83,8 @@ class TicketController extends Controller
     {
         //
     }
-
+    
+    //TODO:針對更新的request做validate
     /**
      * Update the specified resource in storage.
      *
@@ -90,12 +92,12 @@ class TicketController extends Controller
      * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Ticket $ticket)
+    public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
         $ticket->update($request->all());
-        return view('success');
+        return back();
     }
-
+    
     /**
      * Remove the specified resource from storage.
      *
@@ -105,6 +107,6 @@ class TicketController extends Controller
     public function destroy(Ticket $ticket)
     {
         $ticket->delete();
-        return redirect('/history');
+        return back();
     }
 }

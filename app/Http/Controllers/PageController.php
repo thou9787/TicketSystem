@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\ApiRequest\PTXRequest;
 use App\AddColumnData\AddColumnData;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
+use App\Models\TimeTable;
+use Illuminate\Http\Request;
+
 class PageController extends Controller
 {
     /**
@@ -26,6 +27,10 @@ class PageController extends Controller
      */
     public function success()
     {
+        $timeTable = TimeTable::all();
+        foreach ($timeTable as $data) {
+            $data->delete();
+        }
         $success = Ticket::where('user_id', Auth::user()->id)->update(['paid' => AddColumnData::isPaid()]);
         return view('success');
     }
@@ -59,7 +64,6 @@ class PageController extends Controller
     {
         $userID = Auth::user()->id;
         $histories = Ticket::where('user_id', $userID)
-                        ->where('paid', 1)
                         ->get();
         return view('history', [
             'histories' => $histories,

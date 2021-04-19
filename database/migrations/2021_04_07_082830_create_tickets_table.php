@@ -13,21 +13,23 @@ class CreateTicketsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tickets', function (Blueprint $table) {
-            $table->id();
-            $table->string('trainNo');
-            $table->string('originStationName');
-            $table->string('destinationStationName');
-            $table->time('departureTime'); //Carbon()
-            $table->time('arrivalTime');
-            $table->string('fare');
-            $table->integer('amount');
-            $table->string('user_id');
-            $table->string('trainDate');
-            $table->string('ticketNo');
-            $table->integer('paid')->default('0');
-            $table->timestamps();
-        });
+        Schema::create(
+            'tickets',
+            function (Blueprint $table) {
+                $table->id();
+                $table->string('trainNo');
+                $table->string('originStationName');
+                $table->string('destinationStationName');
+                $table->time('departureTime');
+                $table->time('arrivalTime');
+                $table->string('fare');
+                $table->integer('amount');
+                $table->string('user_id');
+                $table->string('trainDate');
+                $table->integer('paid')->default('0');
+                $table->timestamps();
+            }
+        );
     }
 
     /**

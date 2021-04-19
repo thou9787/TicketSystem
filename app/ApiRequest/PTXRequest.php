@@ -9,8 +9,10 @@ class PTXRequest
     private $base_url;
     private $dailyTimeTableUrl;
     private $availableSeatsUrl;
-    private $requestFormat;
+    private $generalTimeTableUrl;
     private $fareUrl;
+    private $requestFormat;
+    
     
     /**
      * Instance the PTXApiAuth object
@@ -25,6 +27,7 @@ class PTXRequest
         $this->base_url = 'https://ptx.transportdata.tw/MOTC/v2/Rail/THSR/';
         $this->dailyTimeTableUrl = 'DailyTimetable/';
         $this->availableSeatsUrl = 'AvailableSeatStatus/Train/';
+        $this->generalTimeTableUrl = 'GeneralTimetable/TrainNo/';
         $this->fareUrl = 'ODFare';
         $this->requestFormat = '$format=JSON';
     }
@@ -61,20 +64,6 @@ class PTXRequest
         }
         
         return $availableSeatsUrl;
-    }
-
-    /**
-     * Get the url of the ticket fare page
-     * 
-     * @param \Illuminate\Http\Request  $request
-     * @return string
-     */
-    private function getFareUrl($request) 
-    {
-        $filterQuery = 'OriginStationID%20eq%20' . "'{$request->originStationId}'" . '%20and%20DestinationStationID%20eq%20' . "'{$request->destinationStationId}'" . '&' . $this->requestFormat;
-        $fareUrl = $this->base_url . $this->fareUrl . '?$filter=' . $filterQuery;
-        
-        return $fareUrl;
     }
 
     /**
@@ -115,7 +104,7 @@ class PTXRequest
                 'arrivalTime' => $table->DestinationStopTime->ArrivalTime,
             ];
         }
-        return $timeTableArr;
+        return isset($timeTableArr) ? $timeTableArr : false;
     }
 
     /**
@@ -127,8 +116,8 @@ class PTXRequest
     {
         $timeTableArr = $this->getTimeTable();
 
-        
-          
+        return $timeTableArr;
+
         foreach ($timeTableArr as $table) {
             $trainNoArr[] = "'" . $table['trainNo'] . "'";
         }
@@ -151,6 +140,20 @@ class PTXRequest
     }
 
     /**
+     * Get the url of the ticket fare page
+     * 
+     * @param \Illuminate\Http\Request  $request
+     * @return string
+     */
+    private function getFareUrl($request) 
+    {
+        $filterQuery = 'OriginStationID%20eq%20' . "'{$request->originStationId}'" . '%20and%20DestinationStationID%20eq%20' . "'{$request->destinationStationId}'" . '&' . $this->requestFormat;
+        $fareUrl = $this->base_url . $this->fareUrl . '?$filter=' . $filterQuery;
+        
+        return $fareUrl;
+    }
+
+    /**
      * Get the fare of the tickets
      * 
      * @return integer
@@ -163,5 +166,37 @@ class PTXRequest
         } else {
             return $fare[0]->Fares[1]->Price;
         }
+    }
+
+    /**
+     * Get the url of the general time table page
+     * 
+     * @param string $trainNo
+     * 
+     * @return string
+     */
+    private function getGeneralTimeTableUrl($trainNo)
+    {
+        $generalTimeTableUrl = $this->base_url . $this->generalTimeTableUrl . $trainNo . '?' . $this->requestFormat;
+
+        return $generalTimeTableUrl;
+    }
+
+    /**
+     * To get the stationID
+     * 
+     * @param string $trainNo
+     * 
+     * @return array 
+     */
+    public function getGeneralTimeTable($trainNo)
+    {
+        $generalTimeTable = $this->sendRequest($this->getGeneralTimeTableUrl($trainNo));
+
+        foreach($generalTimeTable->GeneralTimetable->StopTimes as $station) {
+            $stationIDs[] = $station->StationID;
+        }
+        
+        return $stationIDs;
     }
 }
