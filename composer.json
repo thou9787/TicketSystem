@@ -11,7 +11,8 @@
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
-        "techlab/smartwizard": "^5.1"
+        "techlab/smartwizard": "^5.1",
+        "laravel/ui": "^3.2"
     },
     "require-dev": {
         "heroku/heroku-buildpack-php": "*",
@@ -19,7 +20,6 @@
         "fakerphp/faker": "^1.9.1",
         "laravel/dusk": "^6.15",
         "laravel/sail": "^1.0.1",
-        "laravel/ui": "^3.2",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
         "phpunit/phpunit": "^9.3.3"
