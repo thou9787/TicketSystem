@@ -22,7 +22,7 @@ class CreateTicketsTable extends Migration
                 $table->string('destinationStationName');
                 $table->time('departureTime');
                 $table->time('arrivalTime');
-                $table->string('fare');
+                $table->integer('fare');
                 $table->integer('amount');
                 $table->string('user_id');
                 $table->string('trainDate');
