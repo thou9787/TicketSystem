@@ -17,7 +17,12 @@ class PageController extends Controller
      */
     public function form() 
     {
-        return view('form');
+        if(Auth::check()){
+            return view('form');
+        } else {
+            return redirect('/login');
+        }
+        
     }
 
     /**
@@ -62,11 +67,17 @@ class PageController extends Controller
      */
     public function history()
     {
-        $userID = Auth::user()->id;
-        $histories = Ticket::where('user_id', $userID)
-                        ->get();
-        return view('history', [
-            'histories' => $histories,
-        ]);
+        if(Auth::check()){
+            $userID = Auth::user()->id;
+            $histories = Ticket::where('user_id', $userID)
+                            ->get();
+            return view('history', [
+                'histories' => $histories,
+            ]);
+        } else {
+           
+            return redirect('/login');
+        }
+        
     }
 }
