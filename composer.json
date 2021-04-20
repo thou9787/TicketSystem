@@ -14,6 +14,7 @@
         "techlab/smartwizard": "^5.1"
     },
     "require-dev": {
+        "heroku/heroku-buildpack-php": "*",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/dusk": "^6.15",
