@@ -80,7 +80,7 @@ class PTXRequest
         return json_decode($timeTable);
     }
 
-    private function is_available($seats)
+    private function isAvailable($seats)
     {
         return ($seats->Count == 0) ? false : true;
     }
@@ -124,7 +124,7 @@ class PTXRequest
         $requestAvailableSeatsUrl = $this->getAvailableSeatsUrl($this->request, $trainNoArr);
         $availableSeats = $this->sendRequest($requestAvailableSeatsUrl);
 
-        if ($this->is_available($availableSeats)) {
+        if ($this->isAvailable($availableSeats)) {
             foreach ($availableSeats->AvailableSeats as $seat) {
                 if ($seat->StandardSeatStatus == "O" && $this->request->type == "economic") {
                     $availableTimeTable[$seat->TrainNo] = $timeTableArr[$seat->TrainNo];

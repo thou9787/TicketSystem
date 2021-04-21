@@ -22,13 +22,12 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/form', "PageController@form")->middleware('auth');
-Route::get('/pay', "PageController@pay");
-Route::get('/success', "PageController@success");
-Route::get('/history', "PageController@history");
+Route::get('/pay', "PageController@pay")->middleware('auth');
+Route::get('/success', "PageController@success")->middleware('auth');
+Route::get('/history', "PageController@history")->middleware('auth');
 
 Route::resource('/timetable', TimeTableController::class)->middleware('auth');
 Route::resource('/ticket', TicketController::class)->middleware('auth');
 Route::resource('/user', UserController::class);
 Route::get('/admin/tickets', "AdminController@showAllTickets")->middleware('auth');
 Route::get('/admin/users', "AdminController@showAllUsers")->middleware('auth');
-

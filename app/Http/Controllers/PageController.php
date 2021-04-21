@@ -17,8 +17,7 @@ class PageController extends Controller
      */
     public function form()
     {
-        if (Auth::check()){
-            
+        if (Auth::check()) {
         } else {
             return redirect('/login');
         }

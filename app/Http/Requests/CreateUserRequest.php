@@ -19,9 +19,8 @@ class CreateUserRequest extends FormRequest
         } else {
             return false;
         }
-        
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *
