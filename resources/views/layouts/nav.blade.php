@@ -28,10 +28,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/form" style="color:#fff">首頁<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/form" style="color:#fff"  dusk="index-button">首頁<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/history" style="color:#fff">購票歷史</a>
+                    <a class="nav-link" href="/history" style="color:#fff" dusk="history-button">購票歷史</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/timetableSearch" style="color:#fff">全日時刻表查詢</a>
@@ -42,14 +42,14 @@
                 @guest
                     @if (Route::has('login'))
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}" style="color:#fff">{{ __('Login') }}</a>
+                            <a class="nav-link" href="{{ route('login') }}" style="color:#fff" dusk="login-button">{{ __('Login') }}</a>
                         </li>
                     @endif
 
                     @if (Route::has('register'))
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('register') }}"
-                                style="color:#fff">{{ __('Register') }}</a>
+                                style="color:#fff" dusk="register-button">{{ __('Register') }}</a>
                         </li>
                     @endif
                 @else
