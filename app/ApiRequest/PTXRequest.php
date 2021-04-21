@@ -3,7 +3,7 @@ namespace App\ApiRequest;
 
 use App\ApiRequest\PTXApiAuth;
 
-class PTXRequest 
+class PTXRequest
 {
     private $ApiAuth;
     private $base_url;
@@ -16,7 +16,7 @@ class PTXRequest
     
     /**
      * Instance the PTXApiAuth object
-     * 
+     *
      * @param \Illuminate\Http\Request  $request
      * @return void
      */
@@ -34,7 +34,7 @@ class PTXRequest
 
     /**
      * Combine timetable url strings in request
-     * 
+     *
      * @param \Illuminate\Http\Request  $request
      * @return string
      */
@@ -47,15 +47,15 @@ class PTXRequest
 
     /**
      * Combine seat url strings in request
-     * 
+     *
      * @param \Illuminate\Http\Request  $request
      * @param array $filter
      * @return string
      */
-    private function getAvailableSeatsUrl($request, $filter=NULL)
+    private function getAvailableSeatsUrl($request, $filter = null)
     {
         $availableSeatsUrl = $this->base_url . $this->availableSeatsUrl . 'OD/' . $request->from . '/to/' . $request->to . '/TrainDate/' . $request->date . '?';
-        if ($filter != NULL) {
+        if ($filter != null) {
             $filterQuery = '$filter=trainNo%20eq%20';
             $filterQuery .= implode('%20or%20trainNo%20eq%20', $filter);
             $availableSeatsUrl .= $filterQuery . '%20' . '&' . $this->requestFormat;
@@ -68,7 +68,7 @@ class PTXRequest
 
     /**
      * To get the data from PTX platform
-     * 
+     *
      * @param string $requestUrl
      * @return json
      */
@@ -86,8 +86,8 @@ class PTXRequest
     }
 
     /**
-     * Transform request data to array 
-     * 
+     * Transform request data to array
+     *
      * @return array
      */
     private function getTimeTable()
@@ -109,7 +109,7 @@ class PTXRequest
 
     /**
      * Get the time table which has seats
-     * 
+     *
      * @return array
      */
     public function getAvailableTimeTable()
@@ -124,13 +124,13 @@ class PTXRequest
         $requestAvailableSeatsUrl = $this->getAvailableSeatsUrl($this->request, $trainNoArr);
         $availableSeats = $this->sendRequest($requestAvailableSeatsUrl);
 
-        if($this->is_available($availableSeats)) {
+        if ($this->is_available($availableSeats)) {
             foreach ($availableSeats->AvailableSeats as $seat) {
                 if ($seat->StandardSeatStatus == "O" && $this->request->type == "economic") {
                     $availableTimeTable[$seat->TrainNo] = $timeTableArr[$seat->TrainNo];
                 } elseif ($seat->BusinessSeatStatus == "O" && $this->request->type == "business") {
                     $availableTimeTable[$seat->TrainNo] = $timeTableArr[$seat->TrainNo];
-                } 
+                }
             }
         } else {
             $availableTimeTable = false;
@@ -141,11 +141,11 @@ class PTXRequest
 
     /**
      * Get the url of the ticket fare page
-     * 
+     *
      * @param \Illuminate\Http\Request  $request
      * @return string
      */
-    private function getFareUrl($request) 
+    private function getFareUrl($request)
     {
         $filterQuery = 'OriginStationID%20eq%20' . "'{$request->originStationId}'" . '%20and%20DestinationStationID%20eq%20' . "'{$request->destinationStationId}'" . '&' . $this->requestFormat;
         $fareUrl = $this->base_url . $this->fareUrl . '?$filter=' . $filterQuery;
@@ -155,10 +155,10 @@ class PTXRequest
 
     /**
      * Get the fare of the tickets
-     * 
+     *
      * @return integer
      */
-    public function getFare() 
+    public function getFare()
     {
         $fare = $this->sendRequest($this->getFareUrl($this->request));
         if ($this->request->type == "business") {
@@ -170,9 +170,9 @@ class PTXRequest
 
     /**
      * Get the url of the general time table page
-     * 
+     *
      * @param string $trainNo
-     * 
+     *
      * @return string
      */
     private function getGeneralTimeTableUrl($trainNo)
@@ -184,16 +184,16 @@ class PTXRequest
 
     /**
      * To get the stationID
-     * 
+     *
      * @param string $trainNo
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public function getGeneralTimeTable($trainNo)
     {
         $generalTimeTable = $this->sendRequest($this->getGeneralTimeTableUrl($trainNo));
 
-        foreach($generalTimeTable->GeneralTimetable->StopTimes as $station) {
+        foreach ($generalTimeTable->GeneralTimetable->StopTimes as $station) {
             $stationIDs[] = $station->StationID;
         }
         

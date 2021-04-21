@@ -21,5 +21,4 @@ class TimeTable extends Model
         'type',
         'amount'
     ];
-
 }

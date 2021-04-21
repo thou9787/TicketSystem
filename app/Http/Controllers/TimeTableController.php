@@ -30,7 +30,9 @@ class TimeTableController extends Controller
         $tableCatcher = new PTXRequest($request);
         $timeTable = $tableCatcher->getAvailableTimeTable();
 
-        if ($timeTable == false) return '<script>alert("No tickets")</script>';
+        if ($timeTable == false) {
+            return '<script>alert("No tickets")</script>';
+        }
         /**
          * FIXME:把timetable資料存進cache裡，paginate要做一下
          */
@@ -61,7 +63,7 @@ class TimeTableController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(StoreTimeTableRequest $request)
@@ -72,7 +74,7 @@ class TimeTableController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\TimeTable  $timeTable
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(TimeTable $timeTable)

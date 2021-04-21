@@ -1,8 +1,10 @@
 <?php
 namespace App\ApiRequest;
+
 use Carbon\Carbon;
 
-class PTXApiAuth{
+class PTXApiAuth
+{
     private $appId;
     private $appKey;
     private $time_string;
@@ -21,7 +23,7 @@ class PTXApiAuth{
                     'Authorization:hmac username="' . $this->appId . '", algorithm="hmac-sha1", headers="x-date", signature="' . "$this->signature\"\n" .
                     "x-date: $this->time_string\n",
                     "Accept-Encoding: gzip, deflate\n",
-            ]
+                ]
         ];
     }
     
@@ -37,4 +39,3 @@ class PTXApiAuth{
     }
 }
 //'https://ptx.transportdata.tw/MOTC/v2/Rail/THSR/DailyTrainInfo/Today?$top=5&$format=JSON'
-

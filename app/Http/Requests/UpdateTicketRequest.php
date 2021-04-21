@@ -1,23 +1,37 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Requests;
 
-use Illuminate\Http\Request;
-use App\Models\Ticket;
-use App\Models\User;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class AdminController extends Controller
+class UpdateTicketRequest extends FormRequest
 {
-    //
-    public function showAllTickets()
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
     {
-        $tickets = Ticket::all();
+        if (Auth::User()->role == 'admin') {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-        return view(
-            'admin_tickets',
-            [
-                'tickets' => $tickets,
-                'trainNoList' => ["0108", "0109", "0112", "0113", "0116",
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    //TODO:ID欄位邏輯問題，會導致無法只更改一個欄位
+    public function rules()
+    {
+        return [
+            'id' => 'min:0|unique:tickets',
+            'trainNo' => 'string|in:"0108", "0109", "0112", "0113", "0116",
                 "0117", "0120", "0121", "0124", "0125",
                 "0128", "0129", "0132", "0133", "0136",
                 "0137", "0140", "0141", "0144", "0145",
@@ -40,31 +54,27 @@ class AdminController extends Controller
                 "0821", "0822", "0825", "0826", "0829",
                 "0830", "0833", "0834", "0837", "0838",
                 "0841", "0842", "0845", "0846", "0849",
-                "0850", "0853", "0854", "0857", "0858",
+                "0850", "0853", "0854", "0857", "0858", 
                 "0861", "0862", "1210", "1234", "1237",
                 "1238", "1241", "1245", "1246", "1250",
                 "1253", "1254", "1257", "1258", "1264",
                 "1318", "1320", "1326", "1328", "1330",
-                "1538", "1541", "1542", "1545", "1546",
+                "1538", "1541", "1542", "1545", "1546", 
                 "1549", "1550", "1553", "1554", "1557",
                 "1558", "1562", "1563", "1566", "1570",
                 "1622", "1640", "1643", "1646", "1649",
                 "1652", "1655", "1679", "1682", "1685",
-                "1688"],
-                'placeList' => []
-            ]
-        );
+                "1688"',
+              'to' => 'required',
+        ];
     }
 
-    public function showAllUsers()
+    public function messages()
     {
-        $users = User::all();
-
-        return view(
-            'admin_users',
-            [
-                'users' => $users,
-            ]
-        );
+        return [
+            
+            "from.different" => "出發地點必須與目的地不同",
+            "to.required" => "請選擇目的地",
+        ];
     }
 }

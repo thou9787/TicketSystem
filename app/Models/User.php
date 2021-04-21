@@ -47,10 +47,11 @@ class User extends Authenticatable
 
     /**
      * Relate with tickets table
-     * 
+     *
      * @return ?
      */
-    public function tickets() {
+    public function tickets()
+    {
         return $this->belongsTo('App\Models\Ticket', 'user_id', 'id');
     }
 }

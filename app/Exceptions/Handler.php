@@ -43,11 +43,11 @@ class Handler extends ExceptionHandler
     
     /**
      * Error messages display page rendering
-     * 
+     *
      * @param Illuminate\Http\Request $request
-     * 
+     *
      * @param Throwable $exception
-     * 
+     *
      * @return Illuminate\Contracts\Support\Renderable
      */
     public function render($request, Throwable $exception)

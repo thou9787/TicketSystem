@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use App\Models\Ticket;
 use Illuminate\Console\Command;
 
-
 class ClearExpiredTickets extends Command
 {
     /**

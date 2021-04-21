@@ -24,7 +24,8 @@ class Ticket extends Model
         'paid'
     ];
 
-    public function users() {
+    public function users()
+    {
         return $this->hasmany('App\Models\User');
     }
 }

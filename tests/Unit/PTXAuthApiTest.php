@@ -8,8 +8,10 @@ use PHPUnit\Framework\TestCase;
 use App\ApiRequest\PTXApiAuth;
 use ReflectionClass;
 use Carbon\Carbon;
+
 class PTXAuthApiTest extends TestCase
-{   
+{
+
 
     public function setUp(): void
     {
@@ -25,7 +27,6 @@ class PTXAuthApiTest extends TestCase
         $result = $result->invoke($time);
         
         $this->assertEquals('Mon, 23 Oct 2017 12:00:00 GMT', $result);
-
     }
 
     public function testGetTimeFailed()

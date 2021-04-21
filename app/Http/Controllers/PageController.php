@@ -12,22 +12,22 @@ class PageController extends Controller
 {
     /**
      * Show the THSR search form
-     * 
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function form() 
+    public function form()
     {
-        if(Auth::check()){
-            return view('form');
+        if (Auth::check()){
+            
         } else {
             return redirect('/login');
         }
-        
+        return view('form');
     }
 
     /**
      * Show the success page and update the ticket paid column
-     * 
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function success()
@@ -42,7 +42,7 @@ class PageController extends Controller
 
     /**
      * Show the tickets of users
-     * 
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public static function pay()
@@ -62,12 +62,12 @@ class PageController extends Controller
 
     /**
      * Show the page about bought tickets
-     * 
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function history()
     {
-        if(Auth::check()){
+        if (Auth::check()) {
             $userID = Auth::user()->id;
             $histories = Ticket::where('user_id', $userID)
                             ->get();
@@ -75,9 +75,7 @@ class PageController extends Controller
                 'histories' => $histories,
             ]);
         } else {
-           
             return redirect('/login');
         }
-        
     }
 }
