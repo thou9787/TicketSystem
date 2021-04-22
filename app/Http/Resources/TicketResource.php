@@ -25,6 +25,6 @@ class TicketResource extends JsonResource
             'fare' => $this->fare,
             'user_id' => $this->user_id,
             'ticketNo' => $this->ticketNo
-        ]
+        ];
     }
 }
