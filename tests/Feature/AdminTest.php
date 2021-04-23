@@ -10,9 +10,12 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Carbon\Carbon;
+
 class AdminTest extends TestCase
 {
-    use DatabaseTransactions;
+    //use DatabaseMigrations;
+    use RefreshDatabase;
+    
     public function setUp(): void
     {
         # code...
@@ -24,7 +27,7 @@ class AdminTest extends TestCase
     {
         $users = User::factory(10)->create();
         $tickets = Ticket::factory(10)->create();
-        $this->demoUserLoginIn();
+        $this->demoAdminLoginIn();
         $response = $this->get('/admin/tickets');
 
         $response->assertViewHas('tickets');
@@ -32,13 +35,11 @@ class AdminTest extends TestCase
 
     public function testShowAllUsers()
     {
-        $this->demoUserLoginIn();
+        $this->demoAdminLoginIn();
         $users = User::factory(10)->create();
         
         $response = $this->get('/admin/users');
 
         $response->assertViewHas('users');
     }
-
-    
 }
