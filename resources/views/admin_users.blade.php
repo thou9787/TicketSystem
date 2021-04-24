@@ -40,6 +40,10 @@
 @section('admin_users')
 
 <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bd-example-modal-sm">Add New</button>
+<form action="{{ url('/admin/users')}}">
+    <input type="text" name="filters">
+    <button type="submit" class="btn btn-primary">查詢</button>
+</form>
 <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -109,7 +113,7 @@
                         <td><button type="submit" class="btn btn-primary">更新</button></td>
                     </form>
                     <td>
-                        <form action="{{ url('/user', ['id' => $user->id])}}">
+                        <form action="{{ url('/user', ['id' => $user->id])}}" method="POST">
                             @csrf
                             @method('delete')
                             <input type="hidden" name="id" value="{{ $user->id }}" size="13">

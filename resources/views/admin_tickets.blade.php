@@ -73,6 +73,10 @@
     <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bd-example-modal-sm">
         Add New   <span class="glyphicon glyphicon-chevron-right"></span>
     </button>
+    <form action="{{ url('/admin/tickets')}}">
+        <input type="text" name="filters">
+        <button type="submit" class="btn btn-primary">查詢</button>
+    </form>
     <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
@@ -98,12 +102,17 @@
                             <div class="form-group">
                                 <label for="originStationName">From</label>
                                 <input type="text" class="form-control" id="originStationName" name="originStationName"
-                                    placeholder="台北">
+                                    placeholder="台北" list="placeList">
                             </div>
                             <div class="form-group">
                                 <label for="destinationStationName">To</label>
                                 <input type="text" class="form-control" id="destinationStationName"
-                                    name="destinationStationName" placeholder="台南">
+                                    name="destinationStationName" placeholder="台南" list="placeList">
+                                <datalist id="placeList">
+                                    @foreach ($placeList as $place)
+                                        <option value="{{ $place }}"></option>
+                                    @endforeach
+                                </datalist>
                             </div>
                             <div class="form-group">
                                 <label for="departureTime">DepartureTime</label>
@@ -202,7 +211,7 @@
                                 <td><button type="submit" class="btn btn-primary">更新</button></td>
                             </form>
                             <td>
-                                <form action="{{ url('/ticket', ['id' => $ticket->id]) }}">
+                                <form action="{{ url('/ticket', ['id' => $ticket->id]) }}" method="POST">
                                     @csrf
                                     @method('delete')
                                     <input type="hidden" name="id" value="{{ $ticket->id }}" size="13">

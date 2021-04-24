@@ -78,9 +78,12 @@ class PageController extends Controller
             $userID = Auth::user()->id;
             $histories = Ticket::where('user_id', $userID)
                 ->get();
-            return view('history', [
-                'histories' => $histories,
-            ]);
+            return view(
+                'history',
+                [
+                    'histories' => $histories,
+                ]
+            );
         } else {
             return redirect('/login');
         }

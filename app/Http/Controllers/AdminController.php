@@ -8,10 +8,30 @@ use App\Models\User;
 
 class AdminController extends Controller
 {
-    //
-    public function showAllTickets()
+    private function search($requestFilters, $queryBuilder)
     {
-        $tickets = Ticket::all();
+        if (isset($requestFilters)) {
+            $filters = explode(',', $requestFilters);
+            foreach ($filters as $key => $filter) {
+                list($key, $value) = explode(':', $filter);
+                $queryBuilder->where($key, 'like', "%$value%");
+            }
+        }
+        return $queryBuilder->orderBy('id', 'desc')->get();
+    }
+    
+    /**
+     * Show the request ticket table
+     *
+     * @param Illuminate\Http\Request $request
+     *
+     * @return Illuminate\Contracts\Support\Renderable
+     */
+    public function showTickets(Request $request)
+    {
+        $ticketQuery = Ticket::query();
+        
+        $tickets = $this->search($request->filters, $ticketQuery);
 
         return view(
             'admin_tickets',
@@ -61,9 +81,18 @@ class AdminController extends Controller
         );
     }
 
-    public function showAllUsers()
+    /**
+     * Show the request user table
+     *
+     * @param Illuminate\Http\Request $request
+     *
+     * @return Illuminate\Contracts\Support\Renderable
+     */
+    public function showUsers(Request $request)
     {
-        $users = User::all();
+        $userQuery = User::query();
+
+        $users = $this->search($request->filters, $userQuery);
 
         return view(
             'admin_users',
