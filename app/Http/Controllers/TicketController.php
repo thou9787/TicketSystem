@@ -8,6 +8,7 @@ use App\ApiRequest\PTXRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\TicketResource;
+use Symfony\Component\HttpFoundation\Response;
 
 class TicketController extends Controller
 {
@@ -18,6 +19,8 @@ class TicketController extends Controller
      */
     public function index(Request $request)
     {
+        $tickets = Ticket::all();
+        return response(['data' => $tickets], Response::HTTP_OK);
     }
 
     /**
@@ -28,7 +31,7 @@ class TicketController extends Controller
     public function create(Request $request)
     {
         $ticket = Ticket::create($request->all());
-        $ticket = $ticket->refresh();
+
         return redirect('/admin/tickets');
     }
 
@@ -42,20 +45,22 @@ class TicketController extends Controller
     {
         $fare = new PTXRequest($request);
         while ($request->amount > 0) {
-            Ticket::create([
-                'trainNo' => $request->trainNo,
-                'originStationName' => $request->originStationName,
-                'destinationStationName' => $request->destinationStationName,
-                'departureTime' => $request->departureTime,
-                'arrivalTime' => $request->arrivalTime,
-                'fare' => $fare->getFare(),
-                'amount' => 1,
-                'user_id' => Auth::user()->id,
-                'trainDate' => $request->date,
-            ]);
+            Ticket::create(
+                [
+                    'trainNo' => $request->trainNo,
+                    'originStationName' => $request->originStationName,
+                    'destinationStationName' => $request->destinationStationName,
+                    'departureTime' => $request->departureTime,
+                    'arrivalTime' => $request->arrivalTime,
+                    'fare' => $fare->getFare(),
+                    'amount' => 1,
+                    'user_id' => Auth::user()->id,
+                    'trainDate' => $request->date,
+                ]
+            );
             $request->amount--;
         }
-        
+
         return redirect('/pay');
     }
 
@@ -68,7 +73,6 @@ class TicketController extends Controller
     public function show(Ticket $ticket)
     {
         //
-        return new TicketResource($ticket);
     }
 
     /**
@@ -81,7 +85,7 @@ class TicketController extends Controller
     {
         //
     }
-    
+
     //TODO:針對更新的request做validate
     /**
      * Update the specified resource in storage.
@@ -95,7 +99,7 @@ class TicketController extends Controller
         $ticket->update($request->all());
         return back();
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *

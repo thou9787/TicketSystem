@@ -27,6 +27,7 @@ class CreateTicketsTable extends Migration
                 $table->string('user_id');
                 $table->string('trainDate');
                 $table->integer('paid')->default('0');
+                $table->softDeletes();
                 $table->timestamps();
             }
         );

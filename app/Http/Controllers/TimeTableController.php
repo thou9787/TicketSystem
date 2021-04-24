@@ -33,9 +33,7 @@ class TimeTableController extends Controller
         if ($timeTable == false) {
             return '<script>alert("No tickets")</script>';
         }
-        /**
-         * FIXME:把timetable資料存進cache裡，paginate要做一下
-         */
+        
         foreach ($timeTable as $table) {
             $duration = date('H:i', (strtotime($table['arrivalTime']) - strtotime($table['departureTime'])));
             if (Carbon::create($request->time)->lte(Carbon::create($table['departureTime']))) {

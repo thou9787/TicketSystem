@@ -18,10 +18,10 @@ class PageController extends Controller
     public function form()
     {
         if (Auth::check()) {
+            return view('form');
         } else {
             return redirect('/login');
         }
-        return view('form');
     }
 
     /**
@@ -31,12 +31,16 @@ class PageController extends Controller
      */
     public function success()
     {
-        $timeTable = TimeTable::all();
-        foreach ($timeTable as $data) {
-            $data->delete();
+        if (Auth::check()) {
+            $timeTable = TimeTable::all();
+            foreach ($timeTable as $data) {
+                $data->delete();
+            }
+            $success = Ticket::where('user_id', Auth::user()->id)->update(['paid' => AddColumnData::isPaid()]);
+            return view('success');
+        } else {
+            return redirect('/login');
         }
-        $success = Ticket::where('user_id', Auth::user()->id)->update(['paid' => AddColumnData::isPaid()]);
-        return view('success');
     }
 
     /**
@@ -46,17 +50,21 @@ class PageController extends Controller
      */
     public static function pay()
     {
-        $userID = Auth::user()->id;
-        $tickets = Ticket::where('user_id', $userID)
-                        ->where('paid', 0)
-                        ->get();
-        $total_price = Ticket::where('user_id', $userID)
-                        ->where('paid', 0)
-                        ->sum('fare');
-        return view('pay', [
-            'tickets' => $tickets,
-            'total_price' => $total_price
-        ]);
+        if (Auth::check()) {
+            $userID = Auth::user()->id;
+            $tickets = Ticket::where('user_id', $userID)
+                ->where('paid', 0)
+                ->get();
+            $total_price = Ticket::where('user_id', $userID)
+                ->where('paid', 0)
+                ->sum('fare');
+            return view('pay', [
+                'tickets' => $tickets,
+                'total_price' => $total_price
+            ]);
+        } else {
+            return redirect('/login');
+        }
     }
 
     /**
@@ -69,7 +77,7 @@ class PageController extends Controller
         if (Auth::check()) {
             $userID = Auth::user()->id;
             $histories = Ticket::where('user_id', $userID)
-                            ->get();
+                ->get();
             return view('history', [
                 'histories' => $histories,
             ]);
