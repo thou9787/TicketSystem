@@ -15,9 +15,8 @@ use App\Http\Controllers\Admin;
 |
 */
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
 });
-//TODO: 4. 整合頁面
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -29,5 +28,8 @@ Route::get('/history', "PageController@history")->middleware('auth');
 Route::resource('/timetable', TimeTableController::class)->middleware('auth');
 Route::resource('/ticket', TicketController::class)->middleware('auth');
 Route::resource('/user', UserController::class);
-Route::get('/admin/tickets', "AdminController@showAllTickets")->middleware('auth');
-Route::get('/admin/users', "AdminController@showAllUsers")->middleware('auth');
+Route::get('/admin/tickets', "AdminController@showTickets")->middleware('auth');
+Route::get('/admin/users', "AdminController@showUsers")->middleware('auth');
+Route::get('/test', function () {
+    return view('test_admin_users');
+});
