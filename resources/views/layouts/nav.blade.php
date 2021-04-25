@@ -33,9 +33,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/history" style="color:#fff" dusk="history-button">購票歷史</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/timetableSearch" style="color:#fff">全日時刻表查詢</a>
-                </li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 <!-- Authentication Links -->

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use App\ApiRequest\PTXRequest;
+use App\Http\Requests\CreateTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\TicketResource;
@@ -28,11 +29,12 @@ class TicketController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create(CreateTicketRequest $request)
     {
+        //return $request;
         $ticket = Ticket::create($request->all());
-
-        return redirect('/admin/tickets');
+        
+        return redirect('/admin/tickets')->with('success', 'Create ticket successfully');
     }
 
     /**
@@ -94,10 +96,10 @@ class TicketController extends Controller
      * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateTicketRequest $request, Ticket $ticket)
+    public function update(Request $request, Ticket $ticket)
     {
         $ticket->update($request->all());
-        return back();
+        return back()->with('success', 'Update ticket successfully');
     }
 
     /**
@@ -109,6 +111,6 @@ class TicketController extends Controller
     public function destroy(Ticket $ticket)
     {
         $ticket->delete();
-        return back();
+        return back()->with('success', 'Delete ticket successfully');
     }
 }

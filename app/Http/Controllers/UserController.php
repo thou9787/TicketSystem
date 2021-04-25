@@ -14,7 +14,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
     }
@@ -32,7 +32,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
-        $user = $user->refresh();
+
         return redirect('/admin/users');
     }
 
@@ -97,7 +97,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
         $user->delete();
         return back();
     }

@@ -69,11 +69,12 @@
 @endsection
 
 @section('admin_tickets')
-
+    @include('errorsMessages')
+    @include('successMessages')
     <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bd-example-modal-sm">
         Add New   <span class="glyphicon glyphicon-chevron-right"></span>
     </button>
-    <form action="{{ url('/admin/tickets')}}">
+    <form action="{{ url('/admin/tickets') }}">
         <input type="text" name="filters">
         <button type="submit" class="btn btn-primary">查詢</button>
     </form>
@@ -101,18 +102,19 @@
                             </div>
                             <div class="form-group">
                                 <label for="originStationName">From</label>
-                                <input type="text" class="form-control" id="originStationName" name="originStationName"
-                                    placeholder="台北" list="placeList">
+                                <select class="form-control" id="originStationName" name="originStationName">
+                                    @foreach ($placeList as $place)
+                                        <option value="{{ $place }}">{{ $place }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="destinationStationName">To</label>
-                                <input type="text" class="form-control" id="destinationStationName"
-                                    name="destinationStationName" placeholder="台南" list="placeList">
-                                <datalist id="placeList">
+                                <select class="form-control" id="destinationStationName" name="destinationStationName">
                                     @foreach ($placeList as $place)
-                                        <option value="{{ $place }}"></option>
+                                        <option value="{{ $place }}">{{ $place }}</option>
                                     @endforeach
-                                </datalist>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="departureTime">DepartureTime</label>
