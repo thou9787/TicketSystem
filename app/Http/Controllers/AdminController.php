@@ -8,18 +8,28 @@ use App\Models\User;
 
 class AdminController extends Controller
 {
+    /**
+     * Search database by filter attribute
+     *
+     * @param Illuminate\Http\Request $requestFilters
+     * @param object $queryBuilder
+     *
+     * @return array
+     */
     private function search($requestFilters, $queryBuilder)
     {
         if (isset($requestFilters)) {
             $filters = explode(',', $requestFilters);
             foreach ($filters as $key => $filter) {
-                list($key, $value) = explode(':', $filter);
-                $queryBuilder->where($key, 'like', "%$value%");
+                if (strpos($filter, ':')) {
+                    list($key, $value) = explode(':', $filter);
+                    $queryBuilder->where($key, 'like', "%$value%");
+                }
             }
         }
         return $queryBuilder->orderBy('id', 'desc')->get();
     }
-    
+
     /**
      * Show the request ticket table
      *
@@ -30,7 +40,7 @@ class AdminController extends Controller
     public function showTickets(Request $request)
     {
         $ticketQuery = Ticket::query();
-        
+
         $tickets = $this->search($request->filters, $ticketQuery);
 
         return view(
