@@ -38,7 +38,7 @@
                             @if ($history->paid == 0)
                             <td value="{{ $history->paid }}">未付款</td>
                             <td>
-                                <a href="{{ url('\pay') }}" class="btn btn-success">來去付款</a>
+                                <a href="{{ url('/pay') }}" class="btn btn-success">來去付款</a>
                                 <button type="submit" class="btn btn-primary">取消訂票</button>
                             </td>
                             @else
