@@ -31,7 +31,6 @@ class TicketController extends Controller
      */
     public function create(CreateTicketRequest $request)
     {
-        //return $request;
         $ticket = Ticket::create($request->all());
         
         return redirect('/admin/tickets')->with('success', 'Create ticket successfully');
@@ -64,28 +63,6 @@ class TicketController extends Controller
         }
 
         return redirect('/pay');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Ticket $ticket)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Ticket $ticket)
-    {
-        //
     }
 
     //TODO:針對更新的request做validate

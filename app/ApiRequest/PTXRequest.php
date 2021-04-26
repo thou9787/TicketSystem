@@ -79,7 +79,14 @@ class PTXRequest
         );
         return json_decode($timeTable);
     }
-
+    
+    /**
+     * If the requests is available
+     *
+     * @param json $seats
+     *
+     * @return false|true
+     */
     private function isAvailable($seats)
     {
         return ($seats->Count == 0) ? false : true;
@@ -117,7 +124,7 @@ class PTXRequest
         $timeTableArr = $this->getTimeTable();
 
         return $timeTableArr;
-
+        
         foreach ($timeTableArr as $table) {
             $trainNoArr[] = "'" . $table['trainNo'] . "'";
         }

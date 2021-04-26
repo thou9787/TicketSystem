@@ -30,7 +30,8 @@ class AdminTest extends TestCase
         $this->demoAdminLoginIn();
         $response = $this->get('/admin/tickets');
 
-        $response->assertViewHas('tickets');
+        $response->assertStatus(200)
+            ->assertViewHas('tickets');
     }
 
     public function testShowAllUsers()
@@ -40,6 +41,7 @@ class AdminTest extends TestCase
         
         $response = $this->get('/admin/users');
 
-        $response->assertViewHas('users');
+        $response->assertStatus(200)
+            ->assertViewHas('users');
     }
 }

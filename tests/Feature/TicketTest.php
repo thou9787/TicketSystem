@@ -22,7 +22,14 @@ class TicketTest extends TestCase
         Carbon::setTestNow();
     }
 
+    public function testIndex()
+    {
+        $this->demoAdminLoginIn();
 
+        $response = $this->get('/ticket');
+
+        $response->assertStatus(200);
+    }
     public function testCreate()
     {
         $this->demoAdminLoginIn();
