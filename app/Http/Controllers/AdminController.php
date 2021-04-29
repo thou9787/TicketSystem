@@ -20,11 +20,25 @@ class AdminController extends Controller
     {
         if (isset($requestFilters)) {
             $filters = explode(',', $requestFilters);
-            foreach ($filters as $key => $filter) {
-                if (strpos($filter, ':')) {
-                    list($key, $value) = explode(':', $filter);
-                    $queryBuilder->where($key, 'like', "%$value%");
-                }
+            // foreach ($filters as $key => $filter) {
+            //     if (strpos($filter, ':')) {
+            //         list($key, $value) = explode(':', $filter);
+            //         $queryBuilder->where($key, 'like', "%$value%");
+            //     }
+            // }
+            foreach ($filters as $filter) {
+                $queryBuilder->where('id', 'like', "%$filter%")
+                            ->orWhere('trainNo', 'like', "%$filter%")
+                            ->orWhere('originStationName', 'like', "%$filter%")
+                            ->orWhere('destinationStationName', 'like', "%$filter%")
+                            ->orWhere('departureTime', 'like', "%$filter%")
+                            ->orWhere('arrivalTime', 'like', "%$filter%")
+                            ->orWhere('fare', 'like', "%$filter%")
+                            ->orWhere('amount', 'like', "%$filter%")
+                            ->orWhere('user_id', 'like', "%$filter%")
+                            ->orWhere('trainDate', 'like', "%$filter%")
+                            ->orWhere('paid', 'like', "%$filter%")
+                            ->orWhere('user_id', 'like', "%$filter%");
             }
         }
         return $queryBuilder->orderBy('id', 'desc')->get();
