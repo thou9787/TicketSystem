@@ -25,10 +25,9 @@ class TimeTableController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(StoreTimeTableRequest $request)
+    public function create(StoreTimeTableRequest $request, PTXRequest $ptxrequest)
     {
-        $tableCatcher = new PTXRequest($request);
-        $timeTable = $tableCatcher->getAvailableTimeTable();
+        $timeTable = $ptxrequest->getAvailableTimeTable();
 
         if ($timeTable == false) {
             return '<script>alert("No tickets")</script>';

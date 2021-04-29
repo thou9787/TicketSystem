@@ -10,6 +10,7 @@ class PTXApiAuth
     private $time_string;
     private $signature;
     private $opts;
+
     public function __construct()
     {
         $this->appId = '78c70050ed204b35bfb169173f58d555';
@@ -27,15 +28,24 @@ class PTXApiAuth
         ];
     }
     
+    /**
+     * Get the time by UTC format for request header
+     *
+     * @return string
+     */
     private function getTime()
     {
         // Mon, 23 Oct 2017 12:00:00 GMT';
         return Carbon::now()->tz('UTC')->format('D, d M Y H:i:s \G\M\T');
     }
     
+    /**
+     * Return complete header
+     *
+     * @return array
+     */
     public function getAuthHeaders()
     {
         return $this->opts;
     }
 }
-//'https://ptx.transportdata.tw/MOTC/v2/Rail/THSR/DailyTrainInfo/Today?$top=5&$format=JSON'

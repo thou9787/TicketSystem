@@ -40,11 +40,11 @@ class TicketController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\ApiRequest\PTXRequest $ptxrequest
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, PTXRequest $ptxrequest)
     {
-        $fare = new PTXRequest($request);
         while ($request->amount > 0) {
             Ticket::create(
                 [
@@ -53,7 +53,7 @@ class TicketController extends Controller
                     'destinationStationName' => $request->destinationStationName,
                     'departureTime' => $request->departureTime,
                     'arrivalTime' => $request->arrivalTime,
-                    'fare' => $fare->getFare(),
+                    'fare' => $ptxrequest->getFare(),
                     'amount' => 1,
                     'user_id' => Auth::user()->id,
                     'trainDate' => $request->date,
