@@ -179,6 +179,9 @@ return [
         // App\Providers\RouteServiceProvider::class,
         // Laravel\Dusk\DuskServiceProvider::class,
 
+        //PTXServiceProvider
+        App\Providers\PTXServiceProvider::class,
+
     ],
 
     /*
