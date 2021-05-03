@@ -13,6 +13,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TicketController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -31,8 +36,7 @@ class TicketController extends Controller
      */
     public function create(CreateTicketRequest $request)
     {
-        $ticket = Ticket::create($request->all());
-        
+        Ticket::create($request->all());
         return redirect('/admin/tickets')->with('success', 'Create ticket successfully');
     }
 
@@ -45,23 +49,26 @@ class TicketController extends Controller
      */
     public function store(Request $request, PTXRequest $ptxrequest)
     {
-        while ($request->amount > 0) {
-            Ticket::create(
-                [
-                    'trainNo' => $request->trainNo,
-                    'originStationName' => $request->originStationName,
-                    'destinationStationName' => $request->destinationStationName,
-                    'departureTime' => $request->departureTime,
-                    'arrivalTime' => $request->arrivalTime,
-                    'fare' => $ptxrequest->getFare(),
-                    'amount' => 1,
-                    'user_id' => Auth::user()->id,
-                    'trainDate' => $request->date,
-                ]
-            );
-            $request->amount--;
+        if(parent::formSubmitted('submitted')) {
+            while ($request->amount > 0) {
+                Ticket::create(
+                    [
+                        'trainNo' => $request->trainNo,
+                        'originStationName' => $request->originStationName,
+                        'destinationStationName' => $request->destinationStationName,
+                        'departureTime' => $request->departureTime,
+                        'arrivalTime' => $request->arrivalTime,
+                        'fare' => $ptxrequest->getFare(),
+                        'amount' => 1,
+                        'user_id' => Auth::user()->id,
+                        'trainDate' => $request->date,
+                    ]
+                );
+                $request->amount--;
+            }
+        } else {
+            parent::formSubmitIsRepetition();
         }
-
         return redirect('/pay');
     }
 

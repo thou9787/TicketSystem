@@ -11,14 +11,24 @@ use Carbon\Carbon;
 class TimeTableController extends Controller
 {
     /**
+     * Initialize the parent constructor 
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Illuminate\Contracts\Support\Renderable
      */
-    public function index(Request $request)
+    public function index()
     {
+        parent::formInit('submitted');
         return view('timetable');
     }
+
 
     /**
      * Show the form for creating a new resource.
