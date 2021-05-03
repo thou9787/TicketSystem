@@ -49,7 +49,7 @@ class TicketController extends Controller
      */
     public function store(Request $request, PTXRequest $ptxrequest)
     {
-        if(parent::formSubmitted('submitted')) {
+        if (parent::formSubmitted('submitted')) {
             while ($request->amount > 0) {
                 Ticket::create(
                     [

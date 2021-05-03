@@ -11,7 +11,7 @@ use Carbon\Carbon;
 class TimeTableController extends Controller
 {
     /**
-     * Initialize the parent constructor 
+     * Initialize the parent constructor
      */
     public function __construct()
     {

@@ -89,5 +89,4 @@ class Controller extends BaseController
         // }
         return redirect('/pay');
     }
-
 }
