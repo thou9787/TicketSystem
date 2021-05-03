@@ -55,11 +55,7 @@ class TicketTest extends TestCase
     public function testStore()
     {
         $this->demoAdminLoginIn();
-        $mockUser = Mockery::mock(Auth::class);
-        $mockUser->shouldReceive('user')
-            ->once()
-            ->andReturn(2);
-        $user = $mockUser->user();
+        
         $ticket = [
             'trainNo' => '1234',
             'originStationName' => '台北',
@@ -69,9 +65,8 @@ class TicketTest extends TestCase
             'departureTime' => '5:00:00',
             'arrivalTime' => '7:00:00',
             'fare' => 1350,
-            'user_id' => $user,
+            'user_id' => 2,
             'date' => '2021-04-21',
-
             'amount' => 1,
             'type' => 'business'
         ];
@@ -80,8 +75,6 @@ class TicketTest extends TestCase
             '/ticket',
             $ticket
         );
-        $count = Ticket::count();
-        $this->assertEquals(1, $count);
         $response->assertRedirect('/pay');
     }
 
